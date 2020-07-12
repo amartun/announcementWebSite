@@ -1,6 +1,6 @@
 
-import DAO.StudentDAO;
-import models.Student;
+import DAO.AnnouncementDAO;
+import models.Announcement;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class Servlet extends HttpServlet {
-    private StudentDAO studentDAO;
+    private AnnouncementDAO announcementDAO;
 
     public void init() {
-        studentDAO = new StudentDAO();
+        announcementDAO = new AnnouncementDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -44,8 +44,11 @@ public class Servlet extends HttpServlet {
                 case "/update":
                     updateUser(request, response);
                     break;
-                case "/list-student":
-                    listStudent(request, response);
+                case "/list-announcements":
+                    listAnnouncements(request, response);
+                    break;
+                case "/showDescription":
+                    showDescription(request,response);
                     break;
                 default:
                     getStartPage(request,response);
@@ -60,10 +63,10 @@ public class Servlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void listStudent(HttpServletRequest request, HttpServletResponse response)
+    private void listAnnouncements(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List<Student> listStudent = studentDAO.selectAll();
-        request.setAttribute("listStudent", listStudent);
+        List<Announcement> listStudent = announcementDAO.selectAll();
+        request.setAttribute("listAnnouncement", listStudent);
         RequestDispatcher dispatcher = request.getRequestDispatcher("student-list.jsp");
         dispatcher.forward(request, response);
     }
@@ -78,37 +81,39 @@ public class Servlet extends HttpServlet {
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Student existingStudent = studentDAO.select(id);
+        Announcement existingAnnouncement = announcementDAO.select(id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
-        request.setAttribute("student", existingStudent);
+        request.setAttribute("announcement", existingAnnouncement);
         dispatcher.forward(request, response);
     }
 
    private void insertStudent(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        String name = request.getParameter("name");
-        String klass = request.getParameter("class");
-        String birthdate = request.getParameter("birthdate");
-        Student newStudent = new Student(name, klass, birthdate);
-        studentDAO.insert(newStudent);
-        response.sendRedirect("list-student");
+        String title = request.getParameter("Title");
+        String description = request.getParameter("Description");
+        Announcement newAnnouncement = new Announcement(title, description);
+        announcementDAO.insert(newAnnouncement);
+        response.sendRedirect("list-announcements");
     }
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String klass = request.getParameter("class");
-        String birthdate = request.getParameter("birthdate");
-        Student book = new Student(id, name, klass, birthdate);
-        studentDAO.update(book);
-        response.sendRedirect("list-student");
+        String title = request.getParameter("Title");
+        String description = request.getParameter("Description");
+        Announcement book = new Announcement(id, title, description);
+        announcementDAO.update(book);
+        response.sendRedirect("list-announcements");
     }
 
     private void deleteStudent(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        studentDAO.delete(id);
-        response.sendRedirect("list-student");
+        announcementDAO.delete(id);
+        response.sendRedirect("list-announcements");
+    }
+
+    private void showDescription(HttpServletRequest request, HttpServletResponse response){
+
     }
 }

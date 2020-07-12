@@ -1,6 +1,6 @@
 package DAO;
 
-import models.Student;
+import models.Announcement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,20 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class StudentDAO implements IUser<Student> {
+public class AnnouncementDAO implements IUser<Announcement> {
     private String jdbcURL = "jdbc:mysql://localhost:3306/Students";
     private String jdbcUsername = "root";
     private String jdbcPassword = "1234";
 
-    private static final String INSERT_USERS_SQL = "INSERT INTO Students" + "  (name, class, birthdate) VALUES "
-            + " (?, ?, ?);";
+    private static final String INSERT_ANNOUNCEMENT_SQL = "INSERT INTO announcement" + "  (Title, Description) VALUES "
+            + " (?, ?);";
 
-    private static final String SELECT_USER_BY_ID = "select id,name,class,birthdate from Students where id =?";
-    private static final String SELECT_ALL_USERS = "select * from Students";
-    private static final String DELETE_USERS_SQL = "delete from Students where id = ?;";
-    private static final String UPDATE_USERS_SQL = "update Students set name = ?,class= ?, birthdate =? where id = ?;";
+    private static final String SELECT_ANNOUNCEMENT_BY_ID = "select id,Title,Description from announcement where id =?";
+    private static final String SELECT_ALL_ANNOUNCEMENTS = "select * from announcement";
+    private static final String DELETE_ANNOUNCEMENTS_SQL = "delete from announcement where id = ?;";
+    private static final String UPDATE_ANNOUNCEMENTS_SQL = "update announcement set Title = ?,Description= ? where id = ?;";
 
-    public StudentDAO() {
+    public AnnouncementDAO() {
     }
 
     protected Connection getConnection() {
@@ -42,13 +42,12 @@ public class StudentDAO implements IUser<Student> {
     }
 
     @Override
-    public void insert(Student student) throws SQLException {
-        System.out.println(INSERT_USERS_SQL);
+    public void insert(Announcement announcement) throws SQLException {
+        System.out.println(INSERT_ANNOUNCEMENT_SQL);
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
-            preparedStatement.setString(1, student.getStudent_name());
-            preparedStatement.setString(2, student.getStudent_class());
-            preparedStatement.setString(3, student.getStudent_birthDate());
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ANNOUNCEMENT_SQL)) {
+            preparedStatement.setString(1, announcement.getAnnouncement_title());
+            preparedStatement.setString(2, announcement.getAnnouncemnt_description());
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -56,53 +55,51 @@ public class StudentDAO implements IUser<Student> {
         }
     }
     @Override
-    public Student select(int id) {
-        Student student = null;
+    public Announcement select(int id) {
+        Announcement announcement = null;
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ANNOUNCEMENT_BY_ID);) {
             preparedStatement.setInt(1, id);
             System.out.println(preparedStatement);
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                String name = rs.getString("name");
-                String klass = rs.getString("class");
-                String birthdate = rs.getString("birthdate");
-                student = new Student(id, name, klass, birthdate);
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                announcement = new Announcement(id, title, description);
             }
         } catch (SQLException e) {
             printSQLException(e);
         }
-        return student;
+        return announcement;
     }
 
     @Override
-    public List<Student> selectAll() {
-        List<Student> students = new ArrayList<>();
+    public List<Announcement> selectAll() {
+        List<Announcement> announcements = new ArrayList<>();
         try {
             Connection connection = getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS);
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ANNOUNCEMENTS);
             {
                 System.out.println(preparedStatement);
                 ResultSet rs = preparedStatement.executeQuery();
                 while (rs.next()) {
                     int id = rs.getInt("id");
-                    String name = rs.getString("name");
-                    String klass = rs.getString("class");
-                    String birthdate = rs.getString("birthdate");
-                    students.add(new Student(id, name, klass, birthdate));
+                    String title = rs.getString("Title");
+                    String description = rs.getString("Description");
+                    announcements.add(new Announcement(id, title, description));
                 }
             }
         } catch (SQLException e) {
             printSQLException(e);
         }
-        return students;
+        return announcements;
     }
     @Override
     public boolean delete(int id) throws SQLException {
         boolean rowDeleted;
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL);) {
+             PreparedStatement statement = connection.prepareStatement(DELETE_ANNOUNCEMENTS_SQL);) {
             statement.setInt(1, id);
             rowDeleted = statement.executeUpdate() > 0;
         }
@@ -110,14 +107,13 @@ public class StudentDAO implements IUser<Student> {
     }
 
     @Override
-    public boolean update(Student student) throws SQLException {
+    public boolean update(Announcement announcement) throws SQLException {
         boolean rowUpdated;
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_USERS_SQL);) {
-            statement.setString(1, student.getStudent_name());
-            statement.setString(2, student.getStudent_class());
-            statement.setString(3, student.getStudent_birthDate());
-            statement.setInt(4, student.getId());
+             PreparedStatement statement = connection.prepareStatement(UPDATE_ANNOUNCEMENTS_SQL);) {
+            statement.setString(1, announcement.getAnnouncement_title());
+            statement.setString(2, announcement.getAnnouncemnt_description());
+            statement.setInt(3, announcement.getId());
 
             rowUpdated = statement.executeUpdate() > 0;
         }

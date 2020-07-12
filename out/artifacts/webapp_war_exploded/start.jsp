@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <title>School Management Application</title>
+    <title>Announcement Board</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
@@ -12,7 +12,7 @@
 <header>
     <nav class="navbar navbar-expand-md navbar-dark" style="background-color: darkblue">
         <div>
-            <a href="<%=request.getContextPath()%>/list" class="navbar-brand"> School Management App </a>
+            <a href="<%=request.getContextPath()%>/list" class="navbar-brand"> Announcement Board </a>
         </div>
     </nav>
 </header>
@@ -22,8 +22,7 @@
         <h3 class="text-center">Starting Page</h3>
         <hr>
         <div class="container text-left">
-            <a href="<%=request.getContextPath()%>/list-student" class="btn btn-info">List of Students</a>
-            <a href="<%=request.getContextPath()%>/list-workers" class="btn btn-info">List of Workers</a>
+            <a href="<%=request.getContextPath()%>/list-announcements" class="btn btn-info">List of Announcements</a>
         </div>
     </div>
 </div>

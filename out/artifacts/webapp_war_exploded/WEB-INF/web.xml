@@ -47,7 +47,11 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Servlet</servlet-name>
-        <url-pattern>/list-student</url-pattern>
+        <url-pattern>/list-announcements</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Servlet</servlet-name>
+        <url-pattern>/showDescription</url-pattern>
     </servlet-mapping>
 
 
