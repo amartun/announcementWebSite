@@ -1,14 +1,23 @@
 package models;
 
-import java.util.List;
+import java.util.Date;
 
 public class Announcement {
     protected int id;
     protected String announcement_title;
     protected String announcement_description;
+    protected String announcement_date;
 
-    public Announcement(String description) {
-        this.announcement_description = description;
+
+    public Announcement(int id, String announcement_title, String announcement_description, String announcement_date) {
+        this.id = id;
+        this.announcement_title = announcement_title;
+        this.announcement_description = announcement_description;
+        this.announcement_date = announcement_date;
+    }
+
+    public String getAnnouncement_date() {
+        return announcement_date;
     }
 
     public String getAnnouncement_description() {

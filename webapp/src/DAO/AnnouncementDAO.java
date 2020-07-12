@@ -7,22 +7,26 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
 public class AnnouncementDAO implements IUser<Announcement> {
+    private Date date;
     private String jdbcURL = "jdbc:mysql://localhost:3306/Students";
     private String jdbcUsername = "root";
     private String jdbcPassword = "1234";
 
-    private static final String INSERT_ANNOUNCEMENT_SQL = "INSERT INTO announcement" + "  (Title, Description) VALUES "
-            + " (?, ?);";
+    private static final String INSERT_ANNOUNCEMENT_SQL = "INSERT INTO announcement" + "  (Title, Description, DatePublished) VALUES "
+            + " (?, ?, ?);";
 
-    private static final String SELECT_ANNOUNCEMENT_BY_ID = "select id,Title,Description from announcement where id =?";
+    private static final String SELECT_ANNOUNCEMENT_BY_ID = "select id,Title,Description,DatePublished from announcement where id =?";
     private static final String SELECT_ALL_ANNOUNCEMENTS = "select * from announcement";
     private static final String DELETE_ANNOUNCEMENTS_SQL = "delete from announcement where id = ?;";
     private static final String UPDATE_ANNOUNCEMENTS_SQL = "update announcement set Title = ?,Description= ? where id = ?;";
+
 
     public AnnouncementDAO() {
     }
@@ -44,11 +48,12 @@ public class AnnouncementDAO implements IUser<Announcement> {
 
     @Override
     public void insert(Announcement announcement) throws SQLException {
-        System.out.println(INSERT_ANNOUNCEMENT_SQL);
+        date = new Date();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ANNOUNCEMENT_SQL)) {
             preparedStatement.setString(1, announcement.getAnnouncement_title());
             preparedStatement.setString(2, announcement.getAnnouncement_description());
+           preparedStatement.setString(3, String.valueOf(date));
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -68,7 +73,8 @@ public class AnnouncementDAO implements IUser<Announcement> {
             while (rs.next()) {
                 String title = rs.getString("Title");
                 String description = rs.getString("Description");
-                announcement = new Announcement(id, title, description);
+                String datePublished = rs.getString("DatePublished");
+                announcement = new Announcement(id, title, description, datePublished);
             }
         } catch (SQLException e) {
             printSQLException(e);

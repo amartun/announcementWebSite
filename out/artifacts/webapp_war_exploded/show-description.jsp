@@ -26,7 +26,8 @@
         <br>
 
         <c:forEach var="announcement" items="${listAnnouncement}">
-            <c:out value="${announcement.announcement_description}"/>
+           <c:out value="${announcement.announcement_description}"></c:out>
+            <c:out value="${announcement.announcement_date}"></c:out>
         </c:forEach>
 
 
