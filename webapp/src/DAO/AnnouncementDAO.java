@@ -68,7 +68,7 @@ public class AnnouncementDAO implements IUser<Announcement> {
             while (rs.next()) {
                 String title = rs.getString("Title");
                 String description = rs.getString("Description");
-                announcement = new Announcement(title, description);
+                announcement = new Announcement(id, title, description);
             }
         } catch (SQLException e) {
             printSQLException(e);
