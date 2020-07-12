@@ -1,6 +1,7 @@
 package DAO;
 
 import models.Announcement;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -47,13 +48,14 @@ public class AnnouncementDAO implements IUser<Announcement> {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ANNOUNCEMENT_SQL)) {
             preparedStatement.setString(1, announcement.getAnnouncement_title());
-            preparedStatement.setString(2, announcement.getAnnouncemnt_description());
+            preparedStatement.setString(2, announcement.getAnnouncement_description());
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             printSQLException(e);
         }
     }
+
     @Override
     public Announcement select(int id) {
         Announcement announcement = null;
@@ -66,7 +68,7 @@ public class AnnouncementDAO implements IUser<Announcement> {
             while (rs.next()) {
                 String title = rs.getString("Title");
                 String description = rs.getString("Description");
-                announcement = new Announcement(id, title, description);
+                announcement = new Announcement(title, description);
             }
         } catch (SQLException e) {
             printSQLException(e);
@@ -95,6 +97,7 @@ public class AnnouncementDAO implements IUser<Announcement> {
         }
         return announcements;
     }
+
     @Override
     public boolean delete(int id) throws SQLException {
         boolean rowDeleted;
@@ -112,13 +115,14 @@ public class AnnouncementDAO implements IUser<Announcement> {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ANNOUNCEMENTS_SQL);) {
             statement.setString(1, announcement.getAnnouncement_title());
-            statement.setString(2, announcement.getAnnouncemnt_description());
+            statement.setString(2, announcement.getAnnouncement_description());
             statement.setInt(3, announcement.getId());
 
             rowUpdated = statement.executeUpdate() > 0;
         }
         return rowUpdated;
     }
+
 
     private void printSQLException(SQLException ex) {
         for (Throwable e : ex) {

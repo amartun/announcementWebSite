@@ -4,6 +4,7 @@ import models.Announcement;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -33,25 +34,25 @@ public class Servlet extends HttpServlet {
                     showNewForm(request, response);
                     break;
                 case "/insert":
-                    insertStudent(request, response);
+                    insertAnnouncement(request, response);
                     break;
                 case "/delete":
-                    deleteStudent(request, response);
+                    deleteAnnouncement(request, response);
                     break;
                 case "/edit":
                     showEditForm(request, response);
                     break;
                 case "/update":
-                    updateUser(request, response);
+                    updateAnnouncement(request, response);
                     break;
                 case "/list-announcements":
                     listAnnouncements(request, response);
                     break;
                 case "/showDescription":
-                    showDescription(request,response);
+                    showDescription(request, response);
                     break;
                 default:
-                    getStartPage(request,response);
+                    getStartPage(request, response);
             }
         } catch (SQLException ex) {
             throw new ServletException(ex);
@@ -65,8 +66,8 @@ public class Servlet extends HttpServlet {
 
     private void listAnnouncements(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List<Announcement> listStudent = announcementDAO.selectAll();
-        request.setAttribute("listAnnouncement", listStudent);
+        List<Announcement> listAnnouncement = announcementDAO.selectAll();
+        request.setAttribute("listAnnouncement", listAnnouncement);
         RequestDispatcher dispatcher = request.getRequestDispatcher("student-list.jsp");
         dispatcher.forward(request, response);
     }
@@ -87,7 +88,7 @@ public class Servlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-   private void insertStudent(HttpServletRequest request, HttpServletResponse response)
+    private void insertAnnouncement(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
         String title = request.getParameter("Title");
         String description = request.getParameter("Description");
@@ -96,7 +97,7 @@ public class Servlet extends HttpServlet {
         response.sendRedirect("list-announcements");
     }
 
-    private void updateUser(HttpServletRequest request, HttpServletResponse response)
+    private void updateAnnouncement(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         String title = request.getParameter("Title");
@@ -106,14 +107,18 @@ public class Servlet extends HttpServlet {
         response.sendRedirect("list-announcements");
     }
 
-    private void deleteStudent(HttpServletRequest request, HttpServletResponse response)
+    private void deleteAnnouncement(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         announcementDAO.delete(id);
         response.sendRedirect("list-announcements");
     }
 
-    private void showDescription(HttpServletRequest request, HttpServletResponse response){
-
+    private void showDescription(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String url = request.getParameter("id");
+        List<Announcement> listAnnouncement = Collections.singletonList(announcementDAO.select(Integer.parseInt(url)));
+        request.setAttribute("listAnnouncement", listAnnouncement);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("show-description.jsp");
+        dispatcher.forward(request, response);
     }
 }

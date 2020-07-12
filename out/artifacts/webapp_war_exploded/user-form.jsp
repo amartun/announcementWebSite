@@ -1,3 +1,40 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+
+@amartun
+amartun
+/
+announcementWebSite
+1
+0
+0
+Code
+Issues
+Pull requests
+1
+Actions
+Projects
+Wiki
+Security
+1
+Insights
+Settings
+announcementWebSite/webapp/web/user-form.jsp
+@amartun
+amartun Add basic functionality(1,2,3,4 from TASK. To be done: 5 from Task)
+Latest commit 1c05548 5 hours ago
+History
+1 contributor
+We found a potential security vulnerability in one of your dependencies.
+Only the owner of this repository can see this message.
+
+64 lines (53 sloc)  2.33 KB
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
@@ -50,7 +87,7 @@
                     </fieldset>
 
                     <fieldset class="form-group">
-                        <label>Announcement Description</label> <input type="text" value="<c:out value='${announcement.announcemnt_description}' />" class="form-control" name="Description">
+                        <label>Announcement Description</label> <input type="text" value="<c:out value='${announcement.announcement_description}' />" class="form-control" name="Description">
                     </fieldset>
 
 
@@ -62,3 +99,4 @@
 </body>
 
 </html>
+

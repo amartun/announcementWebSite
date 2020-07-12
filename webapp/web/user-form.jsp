@@ -46,13 +46,14 @@
                     </c:if>
 
                     <fieldset class="form-group">
-                        <label>Announcement Title</label> <input type="text" value="<c:out value='${announcement.announcement_title}' />" class="form-control" name="Title" required="required">
+                        <label>Announcement Title</label>
+                        <input type="text" value="<c:out value='${announcement.announcement_title}' />" class="form-control" name="Title" required="required">
                     </fieldset>
 
                     <fieldset class="form-group">
-                        <label>Announcement Description</label> <input type="text" value="<c:out value='${announcement.announcemnt_description}' />" class="form-control" name="Description">
+                        <label>Announcement Description</label>
+                        <input type="text" value="<c:out value='${announcement.announcement_description}' />" class="form-control" name="Description">
                     </fieldset>
-
 
                     <button type="submit" class="btn btn-success">Save</button>
                 </form>
