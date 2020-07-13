@@ -22,14 +22,59 @@
 <div class="row">
     <div class="container">
         <h3 class="text-center">Announcement Description</h3>
-        <hr>
         <br>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date Published</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="announcement" items="${listAnnouncement}">
+                <tr>
+                    <td>
+                        <c:out value="${announcement.announcement_title}" />
+                    </td>
+                    <td>
+                        <c:out value="${announcement.announcement_description}" />
+                    </td>
+                    <td>
+                        <c:out value="${announcement.announcement_date}" />
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
 
-        <c:forEach var="announcement" items="${listAnnouncement}">
-           <c:out value="${announcement.announcement_description}"></c:out>
-            <c:out value="${announcement.announcement_date}"></c:out>
-        </c:forEach>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+            </tr>
+            </thead>
 
+            <h3 class="text-center">Similar Announcement</h3>
+
+            <br>
+            <tbody>
+            <c:forEach var="announcement" items="${listAnnouncementToCompare}">
+                <tr>
+                    <td>
+                        <c:out value="${announcement.announcement_title}" />
+                    </td>
+                    <td>
+                        <c:out value="${announcement.announcement_description}" />
+                    </td>
+                    <td>
+                        <c:out value="${announcement.announcement_date}" />
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
 
     </div>
 </div>

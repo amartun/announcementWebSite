@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class AnnouncementDAO implements IUser<Announcement> {
     private static final String SELECT_ALL_ANNOUNCEMENTS = "select * from announcement";
     private static final String DELETE_ANNOUNCEMENTS_SQL = "delete from announcement where id = ?;";
     private static final String UPDATE_ANNOUNCEMENTS_SQL = "update announcement set Title = ?,Description= ? where id = ?;";
+    private static final String SELECT_ANNOUNCEMENT_TO_COMPARE = "select Title,Description from announcement where id != ?";
 
 
     public AnnouncementDAO() {
@@ -53,7 +55,7 @@ public class AnnouncementDAO implements IUser<Announcement> {
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ANNOUNCEMENT_SQL)) {
             preparedStatement.setString(1, announcement.getAnnouncement_title());
             preparedStatement.setString(2, announcement.getAnnouncement_description());
-           preparedStatement.setString(3, String.valueOf(date));
+            preparedStatement.setString(3, String.valueOf(date));
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -127,6 +129,47 @@ public class AnnouncementDAO implements IUser<Announcement> {
             rowUpdated = statement.executeUpdate() > 0;
         }
         return rowUpdated;
+    }
+
+
+    public List<Announcement> selectToCompare(int id) {
+        List<Announcement> announcementList = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ANNOUNCEMENT_BY_ID);
+             PreparedStatement preparedStatement2 = connection.prepareStatement(SELECT_ANNOUNCEMENT_TO_COMPARE);) {
+            preparedStatement.setInt(1, id);
+            preparedStatement2.setInt(1, id);
+            System.out.println(preparedStatement);
+            System.out.println(preparedStatement2);
+            ResultSet rs = preparedStatement.executeQuery();
+            ResultSet rs2 = preparedStatement2.executeQuery();
+
+
+
+               while(rs2.next()){
+                   String title = rs2.getString("Title");
+                   String description = rs2.getString("Description");
+                   List<String> descriptionArrayNext = Arrays.asList(description.split(" "));
+                   while (rs.first()) {
+                       String titleFirst = rs.getString("Title");
+                       String descriptionFirst = rs.getString("Description");
+                       List<String> descriptionArrayFirst = Arrays.asList(descriptionFirst.split(" "));
+                       for(int i=0; i<descriptionArrayNext.size(); i++){
+                           if(descriptionArrayFirst.get(i).equalsIgnoreCase(descriptionArrayNext.get(i))){
+                               announcementList.add(new Announcement(title, description));
+                               break;
+                           }
+                           else {
+                               break;
+                           }                   }
+                    break;
+                   }
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return announcementList;
     }
 
 

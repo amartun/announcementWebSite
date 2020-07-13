@@ -68,14 +68,14 @@ public class Servlet extends HttpServlet {
             throws SQLException, IOException, ServletException {
         List<Announcement> listAnnouncement = announcementDAO.selectAll();
         request.setAttribute("listAnnouncement", listAnnouncement);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("student-list.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("announcement-list.jsp");
         dispatcher.forward(request, response);
     }
 
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("announcement-form.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -83,7 +83,7 @@ public class Servlet extends HttpServlet {
             throws SQLException, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Announcement existingAnnouncement = announcementDAO.select(id);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("announcement-form.jsp");
         request.setAttribute("announcement", existingAnnouncement);
         dispatcher.forward(request, response);
     }
@@ -118,6 +118,8 @@ public class Servlet extends HttpServlet {
         String url = request.getParameter("id");
         List<Announcement> listAnnouncement = Collections.singletonList(announcementDAO.select(Integer.parseInt(url)));
         request.setAttribute("listAnnouncement", listAnnouncement);
+        List<Announcement> listAnnouncementToCompare = announcementDAO.selectToCompare(Integer.parseInt(url));
+        request.setAttribute("listAnnouncementToCompare", listAnnouncementToCompare);
         RequestDispatcher dispatcher = request.getRequestDispatcher("show-description.jsp");
         dispatcher.forward(request, response);
     }
